@@ -5,37 +5,55 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bootstrap demo</title>
-    <link href="assets/bootstrap.min.css">
 
 
 </head>
 
 <body>
+<main class="container py-5">
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center ">
+        <div>Data from Backend:</div>
+        <div>
+            <label for="dataValues"></label>
+            <textarea id="dataValues"></textarea>
+        </div>
 
-<span>
-    <textarea id="dataValues">
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center ">
+        <div>Data Set to Backend:</div>
+        <div>
+            <label for="rpm_duty">RPM Duty</label>
+            <input type="range" class="form-range changeable_data" min="0" max="65555" id="rpm_duty"/>
+            <label for="rpm_freq">RPM Freq</label>
+            <input type="range" class="form-range changeable_data" min="0" max="65555" id="rpm_freq"/>
+        </div>
 
-    </textarea>
+    </div>
+</main>
 
 
-<input type="range" class="form-range" min="0" max="65555" id="rpm_duty"/>
-RPM Duty: <span id="rpm_duty_value"></span>
-
-
-<script src="assets/bootstrap.bundle.min.js"></script>
 <script src="assets/jquery-3.6.3.min.js"></script>
 
 <script>
-  jQuery('#rpm_duty').change(function() {
+  jQuery('.changeable_data').change(function() {
 
-    jQuery('#rpm_duty_value').html($(this).val());
-    $.ajax(url, {
-      data: JSON.stringify(myJSObject),
+    var elements = {};
+    $('.changeable_data').each(function(index) {
+      var inputElement = $(this);
+      var name = inputElement.attr('id');
+      var value = inputElement.val();
+      elements[name] = value;
+    });
+    console.log(elements);
+    $.ajax('api/setData', {
+      data: JSON.stringify(elements),
       contentType: 'application/json',
       type: 'POST',
-    }, function() {
+    }, function () {
 
-    });
+    })
+
+
   });
 
   function convertValue(val) {
@@ -45,7 +63,7 @@ RPM Duty: <span id="rpm_duty_value"></span>
   setInterval(function() {
     jQuery.getJSON('api/data.json', function(data) {
       var json = JSON.stringify(data);
-      jQuery('#dataValues').val(json)
+      jQuery('#dataValues').val(json);
 
     });
   }, 1000);

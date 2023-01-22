@@ -1155,7 +1155,7 @@ class Microdot():
                         if 500 in self.error_handlers:
                             res = self.error_handlers[500](req)
                         else:
-                            res = 'Internal server error', 500
+                            res = 'Internal server error'+str(exc), 500
         else:
             if 400 in self.error_handlers:
                 res = self.error_handlers[400](req)

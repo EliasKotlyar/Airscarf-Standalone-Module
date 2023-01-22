@@ -1,10 +1,6 @@
 # Bibliotheken laden
 from machine import Pin
 from utime import sleep
-
-# Initialisierung von GPIO25 als Ausgang
-led_onboard = Pin("LED", Pin.OUT)
-
 from microdot import Microdot
 import mm_wlan
 from airscarf import AirScarf
@@ -34,9 +30,15 @@ def getData(request):
 @app.post('/api/setData')
 def setData(request):
     data = request.json
-    if data.rpm:
-        airscarf.setRpm(data.rpm)
+    #return data
+    rpm_freq = data.get('rpm_freq')
+    rpm_duty = data.get('rpm_duty')
+    if rpm_freq and rpm_duty:
+        rpm_freq = int(rpm_freq)
+        rpm_duty = int(rpm_duty)
+        airscarf.setRpm(rpm_freq,rpm_duty)
     return {'success': True}
 
 
 app.run(port=80)
+

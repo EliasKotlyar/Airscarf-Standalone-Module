@@ -8,11 +8,14 @@ wireless network. https://github.com/monkmakes/mm_wlan
 
 
 import network, time
-class Wlan:
+
 
 wlan = network.WLAN(network.STA_IF)
 
 def connect_to_network(ssid, password, retries=10, verbose=True):
+    # Initialisierung von GPIO25 als Ausgang
+    led_onboard = Pin("LED", Pin.OUT)
+    led_onboard.off()
     wlan.active(True)
     wlan.config(pm = 0xa11140)  # Disable power-save mode
     wlan.connect(ssid, password)
@@ -27,7 +30,10 @@ def connect_to_network(ssid, password, retries=10, verbose=True):
         if verbose: print('\nConnection failed. Check ssid and password')
         raise RuntimeError('WLAN connection failed')
     else:
-        if verbose: print('\nConnected. IP Address = ' + wlan.ifconfig()[0])
+        if verbose:
+            print('\nConnected. IP Address = ' + wlan.ifconfig()[0])
+        led_onboard.on()
+
 
 def is_connected():
     return wlan.status() == network.STAT_GOT_IP
