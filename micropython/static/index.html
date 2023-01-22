@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="assets/bootstrap.min.css">
+
+
+</head>
+
+<body>
+
+<span>
+    <textarea id="dataValues">
+
+    </textarea>
+
+
+<input type="range" class="form-range" min="0" max="65555" id="rpm_duty"/>
+RPM Duty: <span id="rpm_duty_value"></span>
+
+
+<script src="assets/bootstrap.bundle.min.js"></script>
+<script src="assets/jquery-3.6.3.min.js"></script>
+
+<script>
+  jQuery('#rpm_duty').change(function() {
+
+    jQuery('#rpm_duty_value').html($(this).val());
+    $.ajax(url, {
+      data: JSON.stringify(myJSObject),
+      contentType: 'application/json',
+      type: 'POST',
+    }, function() {
+
+    });
+  });
+
+  function convertValue(val) {
+    val = val * (3.3 / 65535);
+  }
+
+  setInterval(function() {
+    jQuery.getJSON('api/data.json', function(data) {
+      var json = JSON.stringify(data);
+      jQuery('#dataValues').val(json)
+
+    });
+  }, 1000);
+  //
+</script>
+</body>
+
+</html>
