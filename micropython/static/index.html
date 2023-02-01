@@ -1,74 +1,132 @@
 <!doctype html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <link rel="stylesheet" href="assets/pico.min.css">
+    <title>Airscarf Control</title>
 
 
 </head>
-
 <body>
-<main class="container py-5">
-    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center ">
-        <div>Data from Backend:</div>
-        <div>
-            <label for="dataValues"></label>
-            <textarea id="dataValues"></textarea>
-        </div>
+<main class="container">
+    <h1>Airscarf Control 1.0</h1>
 
+
+    <h3>Controls:</h3>
+    <div class="grid">
+        <div>
+            <label for="rpm_duty_range">RPM Duty
+                <input type="range" min="0" max="65555" id="rpm_duty_range" value="0"
+                       class="data_from_backend" data-id="rpm_duty"
+                >
+            </label>
+            <label for="rpm_duty">
+                <input type="text" id="rpm_duty" placeholder="0"
+                       class="data_from_backend" data-id="rpm_duty"
+                >
+            </label>
+        </div>
+        <div>
+            <label for="rpm_freq_range">RPM Freq
+                <input type="range" min="0" max="65555" id="rpm_freq_range" value="0"
+                       class="data_from_backend" data-id="rpm_freq"
+                >
+            </label>
+            <label for="rpm_freq">
+                <input type="text" id="rpm_freq" placeholder="0"
+                       class="data_from_backend" data-id="rpm_freq"
+                >
+            </label>
+        </div>
+        <div>
+            <label for="heater_duty_range">Heater Duty
+                <input type="range" min="0" max="65555" id="heater_duty_range" value="0"
+                       class="data_from_backend" data-id="heater_duty"
+                >
+            </label>
+            <label for="heater_duty">
+                <input type="text" id="heater_duty" placeholder="0"
+                       class="data_from_backend" data-id="heater_duty"
+                >
+            </label>
+        </div>
+        <div>
+            <label for="heater_freq_range">Heater Freq
+                <input type="range" min="0" max="65555" id="heater_freq_range" value="0"
+                       class="data_from_backend" data-id="heater_freq"
+                >
+            </label>
+            <label for="heater_freq">
+                <input type="text" id="heater_freq" placeholder="0" required
+                       class="data_from_backend" data-id="heater_freq"
+                >
+            </label>
+        </div>
     </div>
-    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center ">
-        <div>Data Set to Backend:</div>
-        <div>
-            <label for="rpm_duty">RPM Duty</label>
-            <input type="range" class="form-range changeable_data" min="0" max="65555" id="rpm_duty"/>
-            <label for="rpm_freq">RPM Freq</label>
-            <input type="range" class="form-range changeable_data" min="0" max="65555" id="rpm_freq"/>
-        </div>
 
+
+    <div class="grid">
+        <div>
+            <h3>Data</h3>
+            <div>
+                Heater Current:
+                <span class="data_from_backend" data-id="heater_current_value">
+
+                </span> (
+                <span class="data_from_backend" data-id="heater_current_raw">
+
+                </span>)
+            </div>
+            <div>
+                Temperature
+                <span class="data_from_backend" data-id="heater_current_value">
+
+                </span> (
+                <span class="data_from_backend" data-id="heater_current_raw">
+
+                </span>)
+            </div>
+            <div>
+                Board Current:
+                <span class="data_from_backend" data-id="heater_current_value">
+
+                </span> (
+                <span class="data_from_backend" data-id="heater_current_raw">
+
+                </span>)
+            </div>
+
+
+        </div>
+        <div>
+            <h3>Wifi</h3>
+            <label for="wifi_mode">Wifi Mode</label>
+            <select id="wifi_mode" required
+                    class="data_from_backend" data-id="wifi_mode"
+            >
+                <option value="access_point">Access Point</option>
+                <option value="connect_network">Connect to Network</option>
+            </select>
+            <label for="wifi_name">Wifi Name:
+                <input type="text" id="wifi_name"
+                       class="data_from_backend" data-id="wifi_name"
+                >
+            </label>
+            <label for="wifi_pass">Wifi Password:
+                <input type="text" id="wifi_pass"
+                       class="data_from_backend" data-id="wifi_pass"
+                >
+            </label>
+        </div>
     </div>
 </main>
 
 
 <script src="assets/jquery-3.6.3.min.js"></script>
+<script src="assets/airscarf.js"></script>
 
-<script>
-  jQuery('.changeable_data').change(function() {
-
-    var elements = {};
-    $('.changeable_data').each(function(index) {
-      var inputElement = $(this);
-      var name = inputElement.attr('id');
-      var value = inputElement.val();
-      elements[name] = value;
-    });
-    console.log(elements);
-    $.ajax('api/setData', {
-      data: JSON.stringify(elements),
-      contentType: 'application/json',
-      type: 'POST',
-    }, function () {
-
-    })
-
-
-  });
-
-  function convertValue(val) {
-    val = val * (3.3 / 65535);
-  }
-
-  setInterval(function() {
-    jQuery.getJSON('api/data.json', function(data) {
-      var json = JSON.stringify(data);
-      jQuery('#dataValues').val(json);
-
-    });
-  }, 1000);
-  //
-</script>
 </body>
-
 </html>
+
+
