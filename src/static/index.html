@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="assets/pico.min.css">
+    <link rel="stylesheet" href="assets/airscarf.css">
+    <title>Airscarf Control</title>
+
+
+</head>
+<body>
+<main class="container">
+    <h1>Airscarf Control 1.0</h1>
+
+    <div class="grid">
+        <div>
+            <button class="change-profile" data-id="0">Off</button>
+        </div>
+        <div>
+            <button class="change-profile" data-id="1">Profile 1</button>
+        </div>
+        <div>
+            <button class="change-profile" data-id="2">Profile 2</button>
+        </div>
+        <div>
+            <button class="change-profile" data-id="3">Profile 3</button>
+        </div>
+    </div>
+
+
+    <div id="profiles"></div>
+
+
+    <div class="grid">
+        <div>
+            <div style="display: none">
+            <label for="current_profile">Current Profile</label>
+            <select id="current_profile" required
+                    class="config_data" data-id="current_profile"
+            >
+                <option value="0">Disabled</option>
+                <option value="1">Profile 1</option>
+                <option value="2">Profile 2</option>
+                <option value="3">Profile 3</option>
+            </select>
+            </div>
+
+            <h3>Data</h3>
+            <div>
+                Heater Current:
+                <span class="livedata" data-id="heater_current_value">
+
+                </span> (
+                <span class="livedata" data-id="heater_current_raw">
+
+                </span>)
+            </div>
+            <div>
+                Temperature
+                <span class="livedata" data-id="temperature_value">
+
+                </span> (
+                <span class="livedata" data-id="temperature_raw">
+
+                </span>)
+            </div>
+            <div>
+                Board Current:
+                <span class="livedata" data-id="supply_voltage_value">
+
+                </span> (
+                <span class="livedata" data-id="supply_voltage_raw">
+
+                </span>)
+            </div>
+
+
+        </div>
+        <div>
+            <h3>Wifi</h3>
+            <label for="wifi_mode">Wifi Mode</label>
+            <select id="wifi_mode" required
+                    class="wifi_data" data-id="wifi_mode"
+            >
+                <option value="0">Access Point</option>
+                <option value="1">Connect to Network</option>
+            </select>
+            <label for="wifi_name">Wifi Name:
+                <input type="text" id="wifi_name"
+                       class="wifi_data" data-id="wifi_name"
+                >
+            </label>
+            <label for="wifi_pass">Wifi Password:
+                <input type="text" id="wifi_pass"
+                       class="wifi_data" data-id="wifi_pass"
+                >
+            </label>
+            <div>
+                <button id="save_wifi" >Save</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<script src="assets/jquery-3.6.3.min.js"></script>
+<script src="assets/helper.js"></script>
+<script src="assets/livedata.js"></script>
+<script src="assets/wifi.js"></script>
+<script src="assets/profiles.js"></script>
+
+</body>
+</html>
+
+
+
