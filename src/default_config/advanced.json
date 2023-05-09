@@ -1,0 +1,10 @@
+{
+  "heater_frequency": "1000",
+  "fan_frequency": "1000",
+  "monitoring_supply_current": "44000",
+  "monitoring_heater_current": "44000",
+  "monitoring_rpm": "255",
+  "diagnose_delay_heater_current": "2000",
+  "diagnose_delay_rpm": "2000",
+  "diagnose_delay_supply_current": "2000"
+}

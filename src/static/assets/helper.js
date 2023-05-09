@@ -30,10 +30,45 @@ let unflattenObject = (data) => {
 
 function setElement(inputElement, value) {
   if (inputElement.is('input')) {
-    inputElement.val(value);
+    inputElement.val(value).trigger('change');
   } else if (inputElement.is('span')) {
     inputElement.html(value);
   } else if (inputElement.is('select')) {
     inputElement.val(value).change();
   }
 }
+
+function getConfigFromBackend(configName) {
+  var url = '/api/' + configName + '/data.json';
+  $.getJSON(url, function(data) {
+    $.each(data, function(itemName, value) {
+      var inputElement = $('#' + itemName);
+      setElement(inputElement, value);
+    });
+  });
+
+}
+
+
+$('.saveButton').on('click', function(){
+  var configName = $(this).data('id');
+  var elements = {};
+  searchQuery = "#"+configName+" .changeable-value";
+  $(searchQuery).each(function(index) {
+    var inputElement = $(this);
+    var name = inputElement.attr('id');
+    elements[name] = inputElement.val();
+  });
+  const json = JSON.stringify(elements);
+  var url = '/api/' + configName + '/setData';
+
+  $.ajax(url, {
+    data: json,
+    contentType: 'application/json',
+    type: 'POST',
+  }).done(function() {
+        alert("Settings saved!")
+  }).fail(function (jqXHR, textStatus){
+        alert("There was a problem with saving settings: "+ textStatus)
+  });
+});

@@ -1,0 +1,12 @@
+{
+  "current_heater": 1,
+  "current_supply": 2,
+  "monitoring_rpm": 3,
+  "fan1_rpm": 3,
+  "fan2_rpm": 4,
+  "pcb_temperature": 5,
+  "button": 6,
+  "led1": 7,
+  "led2": 8,
+  "led3": 9
+}

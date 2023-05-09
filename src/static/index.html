@@ -5,99 +5,204 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="assets/pico.min.css">
     <link rel="stylesheet" href="assets/airscarf.css">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <title>Airscarf Control</title>
 
 
 </head>
 <body>
 <main class="container">
-    <h1>Airscarf Control 1.0</h1>
 
-    <div class="grid">
-        <div>
-            <button class="change-profile" data-id="0">Off</button>
+
+    <nav>
+        <ul>
+            <li>
+                <h1>Airscarf Control 2.0</h1>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <a href="#" class="activateTab" data-id="profiles">Stage Settings</a>
+            </li>
+            <li>
+                <a href="#" class="activateTab" data-id="monitor">Monitor</a>
+            </li>
+            <li>
+                <a href="#" class="activateTab" data-id="advanced">Advanced Settings</a>
+            </li>
+            <li>
+                <a href="#" class="activateTab" data-id="wifi">Wifi Settings</a>
+            </li>
+        </ul>
+    </nav>
+
+
+    <div id="profiles" class="tab">
+        <h1>Stage Settings</h1>
+
+
+        <div class="grid">
+            <div>
+                <button class="stage-button" data-id="0">Off</button>
+            </div>
+            <div>
+                <button class="stage-button" data-id="1">Low</button>
+            </div>
+            <div>
+                <button class="stage-button" data-id="2">Middle</button>
+            </div>
+            <div>
+                <button class="stage-button" data-id="3">HIGH</button>
+
+            </div>
+            <div>
+                <button class="stage-button" data-id="-1">Error</button>
+            </div>
+            <input type="hidden" id="current_profile" value=""/>
+
         </div>
         <div>
-            <button class="change-profile" data-id="1">Profile 1</button>
+            <span id="error"/>
         </div>
-        <div>
-            <button class="change-profile" data-id="2">Profile 2</button>
+        <br>
+        <br>
+        <br>
+
+        <div class="grid">
+
+            <div>
+                <h2>"Low"</h2>
+                <label for="low_heater">Heater Value</label>
+                <input type="text" id="low_heater" class="changeable-value">
+                <label for="low_fan">Fan Value</label>
+                <input type="text" id="low_fan" class="changeable-value">
+                <button class="saveButton" data-id="profiles">Save</button>
+            </div>
+
+
+            <div>
+
+                <h2>"Middle"</h2>
+                <label for="middle_heater">Heater Value</label>
+                <input type="text" id="middle_heater" class="changeable-value">
+                <label for="middle_fan">Fan Value</label>
+                <input type="text" id="middle_fan" class="changeable-value">
+                <button class="saveButton" data-id="profiles">Save</button>
+            </div>
+
+
+            <div>
+                <h2>"High"</h2>
+
+                <label for="high_heater">Heater Value</label>
+                <input type="text" id="high_heater" class="changeable-value">
+                <label for="high_fan">Fan Value</label>
+                <input type="text" id="high_fan" class="changeable-value">
+                <button class="saveButton" data-id="profiles">Save</button>
+            </div>
         </div>
+
+    </div>
+
+    <div id="advanced" class="tab">
+        <h1>Advanced Settings</h1>
+
+
         <div>
-            <button class="change-profile" data-id="3">Profile 3</button>
+            <h2>Frequency Values</h2>
+            <label for="heater_frequency">Heater Frequency(value in Herzt)</label>
+            <input type="text" id="heater_frequency" class="changeable-value">
+            <label for="fan_frequency">Fan Frequency(value in Herzt)</label>
+            <input type="text" id="fan_frequency" class="changeable-value">
+
+
+            <h2>Monitoring Settings</h2>
+            <label for="monitoring_supply_current">Monitoring of Power Supply VCC: Smallest Voltage possible(insert raw value)</label>
+            <input type="text" id="monitoring_supply_current" class="changeable-value">
+
+            <label for="monitoring_heater_current">Monitoring of Heater: Biggest Voltage possible(insert raw value)</label>
+            <input type="text" id="monitoring_heater_current" class="changeable-value">
+
+            <label for="monitoring_rpm">RPM Monitoring - currently not implmented</label>
+            <input type="text" id="monitoring_rpm" class="changeable-value">
+
+
+            <h2>Diagnose Delays</h2>
+            <label for="diagnose_delay_supply_current">Monitoring of Power Supply VCC(in milliseconds)</label>
+            <input type="text" id="diagnose_delay_supply_current" class="changeable-value">
+
+            <label for="diagnose_delay_heater_current">Monitoring of Heater:(in milliseconds)</label>
+            <input type="text" id="diagnose_delay_heater_current" class="changeable-value">
+
+            <label for="diagnose_delay_rpm">RPM Monitoring - currently not implmented</label>
+            <input type="text" id="diagnose_delay_rpm" class="changeable-value">
+
+
+
+
+            <div>
+                <button class="saveButton" data-id="advanced">Save</button>
+            </div>
         </div>
     </div>
 
+    <div id="monitor" class="tab">
+        <h1>Monitor</h1>
 
-    <div id="profiles"></div>
 
-
-    <div class="grid">
         <div>
-            <div style="display: none">
-            <label for="current_profile">Current Profile</label>
-            <select id="current_profile" required
-                    class="config_data" data-id="current_profile"
-            >
-                <option value="0">Disabled</option>
-                <option value="1">Profile 1</option>
-                <option value="2">Profile 2</option>
-                <option value="3">Profile 3</option>
-            </select>
-            </div>
+            <label for="current_heater">Heater Current - Voltage on PIN</label>
+            <input type="text" id="current_heater">
 
-            <h3>Data</h3>
-            <div>
-                Heater Current:
-                <span class="livedata" data-id="heater_current_value">
+            <label for="current_supply">Supply Current - Voltage on Pin</label>
+            <input type="text" id="current_supply">
 
-                </span> (
-                <span class="livedata" data-id="heater_current_raw">
+            <label for="fan1_rpm">Fan1 RPM Value </label>
+            <input type="text" id="fan1_rpm">
 
-                </span>)
-            </div>
-            <div>
-                Temperature
-                <span class="livedata" data-id="temperature_value">
+            <label for="fan2_rpm">Fan2 RPM Value</label>
+            <input type="text" id="fan2_rpm">
 
-                </span> (
-                <span class="livedata" data-id="temperature_raw">
+            <label for="pcb_temperature">PCB temperature - Voltage on Pin</label>
+            <input type="text" id="pcb_temperature">
 
-                </span>)
-            </div>
-            <div>
-                Board Current:
-                <span class="livedata" data-id="supply_voltage_value">
+            <label for="switch">Button</label>
+            <input type="text" id="switch">
 
-                </span> (
-                <span class="livedata" data-id="supply_voltage_raw">
+            <label for="led1">LED1</label>
+            <input type="text" id="led1">
+            <label for="led2">LED2</label>
+            <input type="text" id="led2">
 
-                </span>)
-            </div>
-
+            <label for="led3">LED3</label>
+            <input type="text" id="led3">
 
         </div>
+    </div>
+
+    <div id="wifi" class="tab">
+        <h1>Wifi Settings</h1>
         <div>
             <h3>Wifi</h3>
             <label for="wifi_mode">Wifi Mode</label>
             <select id="wifi_mode" required
-                    class="wifi_data" data-id="wifi_mode"
+                    class="changeable-value"
             >
                 <option value="0">Access Point</option>
                 <option value="1">Connect to Network</option>
             </select>
             <label for="wifi_name">Wifi Name:
                 <input type="text" id="wifi_name"
-                       class="wifi_data" data-id="wifi_name"
+                       class="changeable-value"
                 >
             </label>
             <label for="wifi_pass">Wifi Password:
                 <input type="text" id="wifi_pass"
-                       class="wifi_data" data-id="wifi_pass"
+                       class="changeable-value"
                 >
             </label>
             <div>
-                <button id="save_wifi" >Save</button>
+                <button class="saveButton" data-id="wifi">Save</button>
             </div>
         </div>
     </div>
@@ -106,9 +211,8 @@
 
 <script src="assets/jquery-3.6.3.min.js"></script>
 <script src="assets/helper.js"></script>
-<script src="assets/livedata.js"></script>
-<script src="assets/wifi.js"></script>
-<script src="assets/profiles.js"></script>
+<script src="assets/airscarf.js"></script>
+
 
 </body>
 </html>

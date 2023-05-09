@@ -1,0 +1,8 @@
+{
+  "middle_heater": 0,
+  "middle_fan": 2000,
+  "high_fan": 3000,
+  "high_heater": 20000,
+  "low_heater": 0,
+  "low_fan": 1500
+}
