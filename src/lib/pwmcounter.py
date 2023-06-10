@@ -28,6 +28,7 @@ class PWMCycleCounter:
         self.waiting_time = waiting_time
         # Set Pin to IN
         Pin(pin, Pin.IN)
+        PIO(state_machine_nr).remove_program()
         # Init State Machine:
         self._sm = StateMachine(state_machine_nr, pwm_counter, freq=1000000, in_base=Pin(pin))
 

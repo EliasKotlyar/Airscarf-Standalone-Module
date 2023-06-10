@@ -1,39 +1,8 @@
 import socket
-import uasyncio
 import gc
 from common.logger import logger
 from common.globalstate import state
-
-
-class DNSQuery:
-    def __init__(self, data):
-        self.data = data
-        self.domain = ''
-        tipo = (data[2] >> 3) & 15  # Opcode bits
-        if tipo == 0:  # Standard query
-            ini = 12
-            lon = data[ini]
-            while lon != 0:
-                self.domain += data[ini + 1:ini + lon + 1].decode('utf-8') + '.'
-                ini += lon + 1
-                lon = data[ini]
-
-            logger.info("searched domain:" + self.domain)
-
-    def response(self, ip):
-
-        print("Response {} == {}".format(self.domain, ip))
-        if self.domain:
-            packet = self.data[:2] + b'\x81\x80'
-            packet += self.data[4:6] + self.data[4:6] + b'\x00\x00\x00\x00'  # Questions and Answers Counts
-            packet += self.data[12:]  # Original Domain Name Question
-            packet += b'\xC0\x0C'  # Pointer to domain name
-            packet += b'\x00\x01\x00\x01\x00\x00\x00\x3C\x00\x04'  # Response type, ttl and resource data length -> 4 bytes
-            packet += bytes(map(int, ip.split('.')))  # 4bytes of IP
-
-        # print(packet)
-        logger.info(packet)
-        return packet
+import uasyncio, usocket
 
 
 class Dns:
@@ -50,31 +19,29 @@ class Dns:
         elif wifi_mode == 0:
             logger.info('Starting DNS')
 
-        udps = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        ip_address = '192.168.4.1'
+        port = 53
+        logger.info("> starting catch all dns server on port {}".format(port))
 
-        # set non-blocking otherwise execution will stop at 'recvfrom' until a connection is received
-        #  and this will prevent the other async threads from running
-        udps.setblocking(False)
-
-        # bind to port 53 on all interfaces
-        udps.bind(('0.0.0.0', 53))
-
+        socket = usocket.socket(usocket.AF_INET, usocket.SOCK_DGRAM)
+        socket.setblocking(False)
+        socket.setsockopt(usocket.SOL_SOCKET, usocket.SO_REUSEADDR, 1)
+        socket.bind(usocket.getaddrinfo(ip_address, port, 0, usocket.SOCK_DGRAM)[0][-1])
         while True:
             try:
-                gc.collect()
-
-                data, addr = udps.recvfrom(4096)
-                logger.info('DNS Incoming Data')
-
-                DNS = DNSQuery(data)
-                SERVER_IP = '192.168.4.1'
-                udps.sendto(DNS.response(SERVER_IP), addr)
-
-                logger.info("Replying: {:s} -> {:s}".format(DNS.domain, SERVER_IP))
-
-                await uasyncio.sleep_ms(100)
-
+                yield uasyncio.core._io_queue.queue_read(socket)
+                request, client = socket.recvfrom(256)
+                response = request[:2]  # request id
+                response += b"\x81\x80"  # response flags
+                response += request[4:6] + request[4:6]  # qd/an count
+                response += b"\x00\x00\x00\x00"  # ns/ar count
+                response += request[12:]  # origional request body
+                response += b"\xC0\x0C"  # pointer to domain name at byte 12
+                response += b"\x00\x01\x00\x01"  # type and class (A record / IN class)
+                response += b"\x00\x00\x00\x3C"  # time to live 60 seconds
+                response += b"\x00\x04"  # response length (4 bytes = 1 ipv4 address)
+                response += bytes(map(int, ip_address.split(".")))  # ip address parts
+                socket.sendto(response, client)
+                #logger.info("Replying: {:s} -> {:s}".format(DNS.domain, SERVER_IP))
             except Exception as e:
-                #logger.info("DNS Timeout")
-                await uasyncio.sleep_ms(3000)
-            udps.close()
+                logger.error(e)

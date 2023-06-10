@@ -24,6 +24,16 @@ class Webserver:
         def index(request):
             return send_file('/static/index.html')
 
+        # Captive Portal Android
+        @app.route('/generate_204')
+        def index(request):
+            return send_file('/static/index.html')
+
+        # Captive Portal Microsoft
+        @app.route('/fwlink')
+        def index(request):
+            return send_file('/static/index.html')
+
         @app.route('/profile.html')
         def profile(request):
             return send_file('/static/profile.html')

@@ -64,8 +64,8 @@ for processClass in processClasses:
 loop = uasyncio.get_event_loop()
 wlan = Wlan()
 loop.run_until_complete(wlan.run())
-wlan = Dns()
-loop.run_until_complete(wlan.run())
+dns = Dns()
+uasyncio.create_task(dns.run())
 
 webserver = Webserver()
 webserver.start()

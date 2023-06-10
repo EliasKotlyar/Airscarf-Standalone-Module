@@ -45,12 +45,13 @@ class Wlan:
 
         if mode == network.AP_IF:
             rp2.country('DE')
+            wlan.disconnect()
             SERVER_IP = '192.168.4.1'
             SERVER_SUBNET = '255.255.255.0'
             wlan.ifconfig((SERVER_IP, SERVER_SUBNET, SERVER_IP, SERVER_IP))
             wlan.config(essid=wifi_name)
-            #wlan.config(password=wifi_pass)
-            wlan.config(security=0)
+            wlan.config(password=wifi_pass)
+            #wlan.config(security=0)
 
             wlan.config(pm=0xa11140)
             wlan.active(True)
