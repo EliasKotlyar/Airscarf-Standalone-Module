@@ -18,7 +18,8 @@ from processes.wlan import Wlan
 from processes.webserver import Webserver
 from common.logger import logger
 from common.globalstate import state
-
+from processes.dns import Dns
+import uasyncio
 gc.collect()
 uasyncio.new_event_loop()
 logger.info("Starting Application!")
@@ -52,13 +53,19 @@ processClasses = [
     HeaterSupplyMonitoring,
     CurrentSupplyMonitoring,
     RpmMonitoring,
-    # General:
-    Wlan,
+
 ]
 for processClass in processClasses:
     process = processClass()
     process.setup()
     uasyncio.create_task(process.run())
+
+
+loop = uasyncio.get_event_loop()
+wlan = Wlan()
+loop.run_until_complete(wlan.run())
+wlan = Dns()
+loop.run_until_complete(wlan.run())
 
 webserver = Webserver()
 webserver.start()
